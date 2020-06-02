@@ -17,6 +17,10 @@ mongoClient.connect(uri, {
     const booksCollection = db.collection('livros');
     const salesCollection = db.collection('vendas');
     
+    var logEmail = null;
+    var logSenha = null;
+    var livro = null;
+
     app.set('view engine', 'ejs');
     app.use(bodyParser.urlencoded({ extended: true}));
     app.use('/static', express.static('public'));
@@ -36,6 +40,28 @@ mongoClient.connect(uri, {
     app.get('/index', (req, res) => {
         res.sendFile(__dirname +'/index.html')  
     });
+    // Livros
+    app.get('/livroAzul', (req, res) => {
+        res.sendFile(__dirname +'/livroAzul.html')
+        livro="O fabuloso livro azul"  
+    });
+    app.get('/livroAm', (req, res) => {
+        res.sendFile(__dirname +'/livroAm.html')  
+        livro="O fabuloso livro amarelo"
+    });
+    app.get('/livroLar', (req, res) => {
+        res.sendFile(__dirname +'/livroLar.html') 
+        livro="O fabuloso livro laranja que é amarelo" 
+    });
+    app.get('/livroVerde', (req, res) => {
+        res.sendFile(__dirname +'/livroVerde.html') 
+        livro="O fabuloso livro verde" 
+    });
+    app.get('/livroVerm', (req, res) => {
+        res.sendFile(__dirname +'/livroVerm.html')  
+        livro="O fabuloso livro vermelho"
+    });
+
 
     //Insere novo usuário
     app.post('/novoUsuario', (req, res) => {
@@ -46,6 +72,7 @@ mongoClient.connect(uri, {
         .catch(error => console.error(error))
     });
 
+    //Login
     app.post('/logar', (req, res) => {
         var data = {
             email: req.body.email,
@@ -63,8 +90,60 @@ mongoClient.connect(uri, {
                     msg: "Não encontrado"
                 });
             }
+            logEmail= req.body.email
+
             res.redirect('/index')
         })
     });
+    //fim login
+
+    app.get('/comprarAzul', (req, res) => {
+        if(logEmail == null){
+            res.redirect('/login');
+        } else {
+            salesCollection.insertOne({comprador: logEmail, livro: livro})
+            booksCollection.updateOne({titulo: livro}, {$inc: {"quantidade": -1}})
+            res.redirect('/livroAzul');
+        }
+    });
+    app.get('/comprarVerm', (req, res) => {
+        if(logEmail == null){
+            res.redirect('/login');
+        } else {
+            salesCollection.insertOne({comprador: logEmail, livro: livro})
+            booksCollection.updateOne({titulo: livro}, {$inc: {"quantidade": -1}})
+            res.redirect('/livroVerm');
+        }
+    });
+    app.get('/comprarVerde', (req, res) => {
+        if(logEmail == null){
+            res.redirect('/login');
+        } else {
+            salesCollection.insertOne({comprador: logEmail, livro: livro})
+            booksCollection.updateOne({titulo: livro}, {$inc: {"quantidade": -1}})
+            res.redirect('/livroVerde');
+        }
+    });
+    app.get('/comprarAm', (req, res) => {
+        if(logEmail == null){
+            res.redirect('/login');
+        } else {
+            salesCollection.insertOne({comprador: logEmail, livro: livro})
+            booksCollection.updateOne({titulo: livro}, {$inc: {"quantidade": -1}})
+            res.redirect('/livroAm');
+        }
+    });
+    app.get('/comprarLar', (req, res) => {
+        if(logEmail == null){
+            res.redirect('/login');
+        } else {
+            salesCollection.insertOne({comprador: logEmail, livro: livro})
+            booksCollection.updateOne({titulo: livro}, {$inc: {"quantidade": -1}})
+            res.redirect('/livroLar');
+        }
+    });
 
 }).catch(console.error);
+
+
+
