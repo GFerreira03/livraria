@@ -3,7 +3,7 @@ const app = express();
 const bodyParser = require('body-parser');
 const mongoClient = require('mongodb').MongoClient;
 
-const uri = 'mongodb+srv://gabrielfas:011235813@cluster0-vmxrj.gcp.mongodb.net/test?retryWrites=true&w=majority';
+const uri = 'mongodb+srv://genericuser:generic@cluster0-vmxrj.gcp.mongodb.net/test?retryWrites=true&w=majority';
 
 mongoClient.connect(uri, {
     useUnifiedTopology: true, useNewUrlParser: true
